@@ -11,7 +11,7 @@ function App() {
 			.get('http://localhost:8080/todos')
 			.then((res) => {
 				// { data, status, statusText, headers, request }
-				// console.log(res.data);
+				console.log(res.data);
 				setTodos(res.data.todos);
 			})
 			.catch((err) => {
