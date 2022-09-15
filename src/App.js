@@ -1,30 +1,28 @@
-import '@fortawesome/fontawesome-free/css/all.min.css';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import TodoForm from './components/TodoForm';
-import TodoContainer from './components/TodoContainer';
+import { Routes, Route } from 'react-router-dom';
+import RegisterPage from './pages/Register';
+import LoginPage from './pages/Login';
+import HomePage from './pages/Home';
+import Header from './components/Header';
+import { useContext } from 'react';
+import { AuthContext } from './contexts/AuthContext';
 
 function App() {
-	const [todos, setTodos] = useState([]);
-	useEffect(() => {
-		axios
-			.get('http://localhost:8080/todos')
-			.then((res) => {
-				// { data, status, statusText, headers, request }
-				console.log(res.data);
-				setTodos(res.data.todos);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	}, []);
+	const ctx = useContext(AuthContext);
 	return (
-		<div className='container mt-5 mb-3' style={{ maxWidth: 576 }}>
-			<div className='my-4'>
-				<TodoForm />
-			</div>
-			<TodoContainer />
-		</div>
+		<>
+			<Header />
+			<Routes>
+				{ctx.isLogged ? (
+					<Route path='/' element={<HomePage />} />
+				) : (
+					<>
+						<Route path='/register' element={<RegisterPage />} />
+						<Route path='/login' element={<LoginPage />} />
+					</>
+				)}
+				<Route path='*' element={<h1>404 !!! Not found</h1>} />
+			</Routes>
+		</>
 	);
 }
 
